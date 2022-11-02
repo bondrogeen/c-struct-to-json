@@ -1,14 +1,12 @@
 {
   "name": "c-struct-to-json",
   "version": "0.1.1",
-  "description": "",
   "main": "build/index.js",
   "scripts": {
     "build": "babel src --out-dir build",
     "dev": "nodemon src/index.js --exec babel-node",
     "start": "node build/index.js"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/core": "^7.12.3",
@@ -18,5 +16,20 @@
     "nodemon": "^2.0.6"
   },
   "author": "bondrogeen@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bondrogeen/c-struct-to-json.git"
+  },
+  "keywords": [
+    "struct",
+    "cpp",
+    "js",
+    "json"
+  ],
+  "bugs": {
+    "url": "https://github.com/bondrogeen/c-struct-to-json/issues"
+  },
+  "homepage": "https://github.com/bondrogeen/c-struct-to-json#readme",
+  "description": ""
 }
