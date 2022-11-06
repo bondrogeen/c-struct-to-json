@@ -1,105 +1,137 @@
-import Struct from './lib/index';
-
-class StructToJSON {
-  constructor() {
-    this.keys = ['INIT'];
-    this.isInit = false;
-    this.onInit = null;
-    this.structs = {
-      INIT: Struct.extend({ name: 'key', type: Struct.types.Uint8 }),
-    };
-    this.types = {
-      int8_t: Struct.types.Int8,
-      int16_t: Struct.types.Int16LE,
-      int32_t: Struct.types.Int32LE,
-      uint8_t: Struct.types.Uint8,
-      uint16_t: Struct.types.Uint16LE,
-      uint32_t: Struct.types.Uint32LE,
-      char: 'String',
-    };
+class Int {
+  #type;
+  #byteOffset;
+  #littleEndian;
+  #length;
+  #byteLength;
+  constructor({ byteLength, type, byteOffset, littleEndian, length }) {
+    this.#type = type;
+    this.#byteOffset = byteOffset;
+    this.#littleEndian = littleEndian || true;
+    this.#length = length || 1;
+    this.#byteLength = byteLength * this.#length;
   }
-  init(data) {
-    if (typeof data === 'object') {
-      const { keys, structs } = data;
-      if (!keys && !Array.isArray(keys) && !structs && typeof data !== 'object') return;
 
-      this.keys = keys;
-      for (const key in structs) {
-        const name = key.toUpperCase();
-        const array = structs[key].map(this.redata.bind(this));
-        this.structs[name] = Struct.extend(...array);
-      }
-      this.isInit = true;
-      if (this.onInit) this.onInit();
+  get byteLength() {
+    return this.#byteLength;
+  }
+
+  #setInt(bufer, value, byteOffset = this.#byteOffset) {
+    bufer[`set${this.#type}`](byteOffset, value, this.#type, this.#littleEndian);
+  }
+
+  #getInt(bufer, byteOffset = this.#byteOffset) {
+    return bufer[`get${this.#type}`](byteOffset, this.#littleEndian);
+  }
+
+  #setIntArray(bufer, array) {
+    for (let i = 0; i < this.#length; i++) {
+      const item = array?.[i] || 0;
+      this.#setInt(bufer, item, this.#byteOffset + i);
     }
   }
 
-  arrToJson(array) {
-    try {
-      let text = String.fromCharCode(...array);
-      const obj = JSON.parse(text);
-      if (obj) this.init(obj);
-    } catch (error) {
-      console.warn(error);
+  #getIntArray(bufer) {
+    const arr = [];
+    for (let i = 0; i < this.#length; i++) {
+      const item = this.#getInt(bufer, this.#byteOffset + i);
+      arr.push(item);
     }
+    return arr;
   }
 
-  redata({ t: type, n: name, l: byteLength }) {
-    const obj = { name, type: this.types[type] };
-    if (byteLength) obj.byteLength = +byteLength;
-    return obj;
+  set(bufer, data) {
+    if (this.#length === 1) this.#setInt(bufer, data);
+    else this.#setIntArray(bufer, data);
   }
 
-  getCommand(key) {
-    return typeof key === 'string' ? this.keys.findIndex(i => i === key) : this.keys[key];
-  }
-
-  cleanString(data) {
-    const obj = {};
-    for (const key in data) {
-      obj[key] = typeof data[key] === 'string' ? data[key].replace(/\0/g, '') : data[key];
-    }
-    return obj;
-  }
-
-  set(key, data) {
-    if (key) {
-      const struct = data ? this.structs[key] : this.structs['INIT'];
-      const command = this.getCommand(key);
-      if (struct && command !== -1) {
-        const object = new struct(new ArrayBuffer(struct.byteLength));
-        if (object) {
-          if (data) {
-            for (const key in object) {
-              object[key] = data[key];
-            }
-          }
-          object['key'] = command;
-          return object;
-        }
-      }
-    }
-    console.warn(`No struct or key ${key}`, data);
-    return null;
-  }
-
-  get(data) {
-    if (data instanceof ArrayBuffer) {
-      const [key, ...array] = new Uint8Array(data);
-      if (key === 0 && !this.isInit) this.arrToJson(array);
-      const comm = this.getCommand(key);
-      if (comm) {
-        const struct = this.structs[comm];
-        if (struct) {
-          const obj = this.cleanString(new struct(data));
-          obj['key'] = comm;
-          return obj;
-        }
-      }
-    }
-    console.warn(`No struct from arr: ${data}`);
-    return null;
+  get(bufer) {
+    return this.#length === 1 ? this.#getInt(bufer) : this.#getIntArray(bufer);
   }
 }
 
-export default StructToJSON;
+class Char extends Int {
+  constructor(object) {
+    super(object);
+  }
+  set(bufer, value) {
+    const arr = value.split('').map(char => char.charCodeAt(0));
+    super.set(bufer, arr);
+  }
+  get(bufer) {
+    const arr = super.get(bufer);
+    return String.fromCharCode(...arr.filter(i => i));
+  }
+}
+
+class Struct {
+  #length;
+  #object;
+  #struct;
+  #byteOffset;
+
+  constructor(array) {
+    this.#length = 0;
+    this.#object = {};
+    this.#byteOffset = 0;
+    this.init(array);
+    this.#struct = new DataView(new ArrayBuffer(this.#length));
+  }
+
+  init(array) {
+    array.forEach(item => {
+      this.#object[item.name] = this.getInstanceData(item.type, { ...item, byteOffset: this.#byteOffset });
+      const byteLength = this.#object[item.name].byteLength;
+      this.#byteOffset += byteLength;
+      this.#length += byteLength;
+    });
+  }
+
+  getInstanceData(type, data) {
+    if (['int8_t'].includes(type)) return new Int({ ...data, byteLength: 1, type: 'Int8' });
+    if (['int16_t'].includes(type)) return new Int({ ...data, byteLength: 2, type: 'Int16' });
+    if (['int32_t'].includes(type)) return new Int({ ...data, byteLength: 4, type: 'Int32' });
+    if (['uint8_t'].includes(type)) return new Int({ ...data, byteLength: 1, type: 'Uint8' });
+    if (['uint8_t'].includes(type)) return new Int({ ...data, byteLength: 1, type: 'Uint8' });
+    if (['uint16_t'].includes(type)) return new Int({ ...data, byteLength: 2, type: 'Uint16' });
+    if (['uint32_t'].includes(type)) return new Int({ ...data, byteLength: 4, type: 'Uint32' });
+    if (['float'].includes(type)) return new Int({ ...data, byteLength: 4, type: 'Float32' });
+    if (['char'].includes(type)) return new Char({ ...data, byteLength: 1, type: 'Uint8' });
+  }
+
+  get length() {
+    return this.#length;
+  }
+
+  getObject() {
+    const obj = {};
+    for (const key in this.#object) {
+      const data = this.#object[key];
+      if (data) obj[key] = data.get(this.#struct);
+    }
+    return obj;
+  }
+
+  setObject(object) {
+    for (const key in object) {
+      const data = this.#object[key];
+      const value = object[key];
+      if (data) data.set(this.#struct, value);
+    }
+    return this;
+  }
+
+  getBuffer() {
+    return this.#struct.buffer;
+  }
+
+  setBuffer(buffer) {
+    if (buffer instanceof ArrayBuffer) {
+      if (buffer.byteLength !== this.#struct.buffer.byteLength) return this;
+      this.#struct = new DataView(buffer);
+    }
+    return this;
+  }
+}
+
+export default Struct;

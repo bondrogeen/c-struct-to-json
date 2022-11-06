@@ -5,6 +5,7 @@
   "scripts": {
     "build": "babel src --out-dir build",
     "dev": "nodemon src/index.js --exec babel-node",
+    "example": "nodemon example/example.js --exec babel-node",
     "start": "node build/index.js"
   },
   "devDependencies": {
