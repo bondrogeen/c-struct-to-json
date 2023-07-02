@@ -40,6 +40,7 @@ var _byteOffset = /*#__PURE__*/new WeakMap();
 var _littleEndian = /*#__PURE__*/new WeakMap();
 var _length = /*#__PURE__*/new WeakMap();
 var _byteLength = /*#__PURE__*/new WeakMap();
+var _size = /*#__PURE__*/new WeakMap();
 var _setInt = /*#__PURE__*/new WeakSet();
 var _getInt = /*#__PURE__*/new WeakSet();
 var _setIntArray = /*#__PURE__*/new WeakSet();
@@ -76,16 +77,26 @@ var Int = /*#__PURE__*/function () {
       writable: true,
       value: void 0
     });
+    _classPrivateFieldInitSpec(this, _size, {
+      writable: true,
+      value: void 0
+    });
     _classPrivateFieldSet(this, _type, type);
     _classPrivateFieldSet(this, _byteOffset, _byteOffset2);
     _classPrivateFieldSet(this, _littleEndian, littleEndian || true);
     _classPrivateFieldSet(this, _length, length || 1);
-    _classPrivateFieldSet(this, _byteLength, byteLength * _classPrivateFieldGet(this, _length));
+    _classPrivateFieldSet(this, _byteLength, byteLength);
+    _classPrivateFieldSet(this, _size, byteLength * _classPrivateFieldGet(this, _length));
   }
   _createClass(Int, [{
     key: "byteLength",
     get: function get() {
       return _classPrivateFieldGet(this, _byteLength);
+    }
+  }, {
+    key: "size",
+    get: function get() {
+      return _classPrivateFieldGet(this, _size);
     }
   }, {
     key: "set",
@@ -110,15 +121,15 @@ function _getInt2(bufer) {
 }
 function _setIntArray2(bufer, array) {
   for (var i = 0; i < _classPrivateFieldGet(this, _length); i++) {
-    var item = (array === null || array === void 0 ? void 0 : array[i]) || 0;
-    _classPrivateMethodGet(this, _setInt, _setInt2).call(this, bufer, item, _classPrivateFieldGet(this, _byteOffset) + i);
+    var value = (array === null || array === void 0 ? void 0 : array[i]) || 0;
+    _classPrivateMethodGet(this, _setInt, _setInt2).call(this, bufer, value, _classPrivateFieldGet(this, _byteOffset) + i * _classPrivateFieldGet(this, _byteLength));
   }
 }
 function _getIntArray2(bufer) {
   var arr = [];
   for (var i = 0; i < _classPrivateFieldGet(this, _length); i++) {
-    var item = _classPrivateMethodGet(this, _getInt, _getInt2).call(this, bufer, _classPrivateFieldGet(this, _byteOffset) + i);
-    arr.push(item);
+    var value = _classPrivateMethodGet(this, _getInt, _getInt2).call(this, bufer, _classPrivateFieldGet(this, _byteOffset) + i * _classPrivateFieldGet(this, _byteLength));
+    arr.push(value);
   }
   return arr;
 }
@@ -185,9 +196,9 @@ var Struct = /*#__PURE__*/function () {
         _classPrivateFieldGet(_this, _object)[item.name] = _this.getInstanceData(item.type, _objectSpread(_objectSpread({}, item), {}, {
           byteOffset: _classPrivateFieldGet(_this, _byteOffset3)
         }));
-        var byteLength = _classPrivateFieldGet(_this, _object)[item.name].byteLength;
-        _classPrivateFieldSet(_this, _byteOffset3, _classPrivateFieldGet(_this, _byteOffset3) + byteLength);
-        _classPrivateFieldSet(_this, _length2, _classPrivateFieldGet(_this, _length2) + byteLength);
+        var size = _classPrivateFieldGet(_this, _object)[item.name].size;
+        _classPrivateFieldSet(_this, _byteOffset3, _classPrivateFieldGet(_this, _byteOffset3) + size);
+        _classPrivateFieldSet(_this, _length2, _classPrivateFieldGet(_this, _length2) + size);
       });
     }
   }, {
@@ -264,7 +275,7 @@ var Struct = /*#__PURE__*/function () {
     key: "setBuffer",
     value: function setBuffer(buffer) {
       if (buffer instanceof ArrayBuffer) {
-        if (buffer.byteLength !== _classPrivateFieldGet(this, _struct).buffer.byteLength) return this;
+        if (buffer.size !== _classPrivateFieldGet(this, _struct).buffer.size) return this;
         _classPrivateFieldSet(this, _struct, new DataView(buffer));
       }
       return this;

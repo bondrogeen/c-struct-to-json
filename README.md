@@ -85,7 +85,7 @@ console.log(newMyStruct);
 
 See [example/example.js](example/example.js) for more.
 
-### 1.0.1 (2023-07-02)
+### 1.0.2 (2023-07-02)
 
 - (bondrogeen) fix array size
 
