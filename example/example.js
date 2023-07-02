@@ -9,9 +9,10 @@ const myStruct = new Struct([
   { name: 'height', type: 'int16_t' },
   { name: 'depth', type: 'int32_t' },
   { name: 'text', type: 'char', length: 10 },
+  { name: 'uint32', type: 'uint32_t', length: 8 },
 ]);
 
-myStruct.setObject({ key: 37, version: [5, 68, 255], size: 65535, total: 4294967295, temp: [0, -127], height: -32768, depth: -2147483648, text: 'test' });
+myStruct.setObject({ key: 37, version: [5, 68, 255], size: 65535, total: 4294967295, temp: [0, -127], height: -32768, depth: -2147483648, text: 'test', uint32: [0, 654321, 2, 3, 999999, 5] });
 
 const object = myStruct.getObject();
 console.log(object);

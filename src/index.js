@@ -4,16 +4,23 @@ class Int {
   #littleEndian;
   #length;
   #byteLength;
+  #size;
+
   constructor({ byteLength, type, byteOffset, littleEndian, length }) {
     this.#type = type;
     this.#byteOffset = byteOffset;
     this.#littleEndian = littleEndian || true;
     this.#length = length || 1;
-    this.#byteLength = byteLength * this.#length;
+    this.#byteLength = byteLength;
+    this.#size = byteLength * this.#length;
   }
 
   get byteLength() {
     return this.#byteLength;
+  }
+
+  get size() {
+    return this.#size;
   }
 
   #setInt(bufer, value, byteOffset = this.#byteOffset) {
@@ -26,16 +33,16 @@ class Int {
 
   #setIntArray(bufer, array) {
     for (let i = 0; i < this.#length; i++) {
-      const item = array?.[i] || 0;
-      this.#setInt(bufer, item, this.#byteOffset + i);
+      const value = array?.[i] || 0;
+      this.#setInt(bufer, value, this.#byteOffset + i * this.#byteLength);
     }
   }
 
   #getIntArray(bufer) {
     const arr = [];
     for (let i = 0; i < this.#length; i++) {
-      const item = this.#getInt(bufer, this.#byteOffset + i);
-      arr.push(item);
+      const value = this.#getInt(bufer, this.#byteOffset + i * this.#byteLength);
+      arr.push(value);
     }
     return arr;
   }
@@ -81,9 +88,9 @@ class Struct {
   init(array) {
     array.forEach(item => {
       this.#object[item.name] = this.getInstanceData(item.type, { ...item, byteOffset: this.#byteOffset });
-      const byteLength = this.#object[item.name].byteLength;
-      this.#byteOffset += byteLength;
-      this.#length += byteLength;
+      const size = this.#object[item.name].size;
+      this.#byteOffset += size;
+      this.#length += size;
     });
   }
 
@@ -127,7 +134,7 @@ class Struct {
 
   setBuffer(buffer) {
     if (buffer instanceof ArrayBuffer) {
-      if (buffer.byteLength !== this.#struct.buffer.byteLength) return this;
+      if (buffer.size !== this.#struct.buffer.size) return this;
       this.#struct = new DataView(buffer);
     }
     return this;

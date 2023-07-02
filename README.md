@@ -22,7 +22,7 @@ npm run build
 
 ## Usage
 
-``` js
+```js
 // const Struct = require('c-struct-to-json')
 import Struct from 'c-struct-to-json';
 
@@ -35,9 +35,10 @@ const myStruct = new Struct([
   { name: 'height', type: 'int16_t' },
   { name: 'depth', type: 'int32_t' },
   { name: 'text', type: 'char', length: 10 },
+  { name: 'uint32', type: 'uint32_t', length: 8 },
 ]);
 
-myStruct.setObject({ key: 37, version: [5, 68, 255], size: 65535, total: 4294967295, temp: [0, -127], height: -32768, depth: -2147483648, text: 'test' });
+myStruct.setObject({ key: 37, version: [5, 68, 255], size: 65535, total: 4294967295, temp: [0, -127], height: -32768, depth: -2147483648, text: 'test', uint32: [0, 654321, 2, 3, 999999, 5] });
 
 const object = myStruct.getObject();
 
@@ -51,6 +52,11 @@ console.log(object);
 //   height: -32768,
 //   depth: -2147483648,
 //   text: 'test'
+//   uint32: [
+//     0, 654321, 2,
+//     3, 999999, 5,
+//     0,      0
+//   ]
 // }
 
 const buffer = myStruct.getBuffer();
@@ -58,8 +64,8 @@ const buffer = myStruct.getBuffer();
 console.log(buffer);
 
 // ArrayBuffer {
-//   [Uint8Contents]: <25 05 44 ff ff ff ff ff ff ff 00 81 00 80 00 00 00 80 74 65 73 74 00 00 00 00 00 00>,
-//   byteLength: 28
+//   [Uint8Contents]: <25 05 44 ff ff ff ff ff ff ff 00 81 00 80 00 00 00 80 74 65 73 74 00 00 00 00 00 00 00 00 00 00 f1 fb 09 00 02 00 00 00 03 00 00 00 3f 42 0f 00 05 00 00 00 00 00 00 00 00 00 00 00>,
+//   byteLength: 60
 // }
 
 const newMyStruct = myStruct.setBuffer(new ArrayBuffer(myStruct.length)).getObject();
@@ -75,11 +81,13 @@ console.log(newMyStruct);
 //   depth: 0,
 //   text: ''
 // }
-
 ```
 
 See [example/example.js](example/example.js) for more.
 
+### 1.0.1 (2023-07-02)
+
+- (bondrogeen) fix array size
 
 ### 1.0.0 (2022-11-06)
 
