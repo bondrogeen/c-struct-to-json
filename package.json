@@ -1,20 +1,14 @@
 {
   "name": "c-struct-to-json",
-  "version": "1.0.2",
+  "version": "1.1.2",
   "main": "build/index.js",
   "scripts": {
-    "build": "babel src --out-dir build",
-    "dev": "nodemon src/index.js --exec babel-node",
-    "example": "nodemon example/example.js --exec babel-node",
-    "start": "node build/index.js"
+    "build": "tsc",
+    "start": "node example/example.js"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.3",
-    "@babel/node": "^7.12.1",
-    "@babel/preset-env": "^7.12.1",
     "eslint": "^8.14.0",
-    "nodemon": "^2.0.6"
+    "typescript": "^5.9.2"
   },
   "author": "bondrogeen@gmail.com",
   "license": "MIT",

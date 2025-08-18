@@ -1,4 +1,8 @@
-import Struct from '../src';
+// import Struct from '../build/index.js';
+const Struct = require('../build/index.js').default
+
+console.log(Struct);
+
 
 const myStruct = new Struct([
   { name: 'key', type: 'uint8_t' },

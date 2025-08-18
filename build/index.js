@@ -1,287 +1,186 @@
 "use strict";
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-function _get() { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get.bind(); } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(arguments.length < 3 ? target : receiver); } return desc.value; }; } return _get.apply(this, arguments); }
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _classPrivateMethodInitSpec(obj, privateSet) { _checkPrivateRedeclaration(obj, privateSet); privateSet.add(obj); }
-function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
-function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
-function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(receiver)) { throw new TypeError("attempted to get private field on non-instance"); } return fn; }
-function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
-function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
-function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
-function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
-function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
-var _type = /*#__PURE__*/new WeakMap();
-var _byteOffset = /*#__PURE__*/new WeakMap();
-var _littleEndian = /*#__PURE__*/new WeakMap();
-var _length = /*#__PURE__*/new WeakMap();
-var _byteLength = /*#__PURE__*/new WeakMap();
-var _size = /*#__PURE__*/new WeakMap();
-var _setInt = /*#__PURE__*/new WeakSet();
-var _getInt = /*#__PURE__*/new WeakSet();
-var _setIntArray = /*#__PURE__*/new WeakSet();
-var _getIntArray = /*#__PURE__*/new WeakSet();
-var Int = /*#__PURE__*/function () {
-  function Int(_ref) {
-    var byteLength = _ref.byteLength,
-      type = _ref.type,
-      _byteOffset2 = _ref.byteOffset,
-      littleEndian = _ref.littleEndian,
-      length = _ref.length;
-    _classCallCheck(this, Int);
-    _classPrivateMethodInitSpec(this, _getIntArray);
-    _classPrivateMethodInitSpec(this, _setIntArray);
-    _classPrivateMethodInitSpec(this, _getInt);
-    _classPrivateMethodInitSpec(this, _setInt);
-    _classPrivateFieldInitSpec(this, _type, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldInitSpec(this, _byteOffset, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldInitSpec(this, _littleEndian, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldInitSpec(this, _length, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldInitSpec(this, _byteLength, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldInitSpec(this, _size, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldSet(this, _type, type);
-    _classPrivateFieldSet(this, _byteOffset, _byteOffset2);
-    _classPrivateFieldSet(this, _littleEndian, littleEndian || true);
-    _classPrivateFieldSet(this, _length, length || 1);
-    _classPrivateFieldSet(this, _byteLength, byteLength);
-    _classPrivateFieldSet(this, _size, byteLength * _classPrivateFieldGet(this, _length));
-  }
-  _createClass(Int, [{
-    key: "byteLength",
-    get: function get() {
-      return _classPrivateFieldGet(this, _byteLength);
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var _Int_instances, _Int_type, _Int_byteOffset, _Int_littleEndian, _Int_length, _Int_byteLength, _Int_size, _Int_setInt, _Int_getInt, _Int_setIntArray, _Int_getIntArray, _Struct_length, _Struct_object, _Struct_struct, _Struct_byteOffset;
+Object.defineProperty(exports, "__esModule", { value: true });
+class Int {
+    constructor({ byteLength, type, byteOffset, littleEndian, length }) {
+        _Int_instances.add(this);
+        _Int_type.set(this, void 0);
+        _Int_byteOffset.set(this, void 0);
+        _Int_littleEndian.set(this, void 0);
+        _Int_length.set(this, void 0);
+        _Int_byteLength.set(this, void 0);
+        _Int_size.set(this, void 0);
+        __classPrivateFieldSet(this, _Int_type, type, "f");
+        __classPrivateFieldSet(this, _Int_byteOffset, byteOffset, "f");
+        __classPrivateFieldSet(this, _Int_littleEndian, littleEndian ?? true, "f");
+        __classPrivateFieldSet(this, _Int_length, length ?? 1, "f");
+        __classPrivateFieldSet(this, _Int_byteLength, byteLength, "f");
+        __classPrivateFieldSet(this, _Int_size, byteLength * __classPrivateFieldGet(this, _Int_length, "f"), "f");
     }
-  }, {
-    key: "size",
-    get: function get() {
-      return _classPrivateFieldGet(this, _size);
+    get byteLength() {
+        return __classPrivateFieldGet(this, _Int_byteLength, "f");
     }
-  }, {
-    key: "set",
-    value: function set(bufer, data) {
-      if (_classPrivateFieldGet(this, _length) === 1) _classPrivateMethodGet(this, _setInt, _setInt2).call(this, bufer, data);else _classPrivateMethodGet(this, _setIntArray, _setIntArray2).call(this, bufer, data);
+    get size() {
+        return __classPrivateFieldGet(this, _Int_size, "f");
     }
-  }, {
-    key: "get",
-    value: function get(bufer) {
-      return _classPrivateFieldGet(this, _length) === 1 ? _classPrivateMethodGet(this, _getInt, _getInt2).call(this, bufer) : _classPrivateMethodGet(this, _getIntArray, _getIntArray2).call(this, bufer);
+    set(buffer, data) {
+        if (__classPrivateFieldGet(this, _Int_length, "f") === 1)
+            __classPrivateFieldGet(this, _Int_instances, "m", _Int_setInt).call(this, buffer, data);
+        else
+            __classPrivateFieldGet(this, _Int_instances, "m", _Int_setIntArray).call(this, buffer, data);
     }
-  }]);
-  return Int;
-}();
-function _setInt2(bufer, value) {
-  var byteOffset = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _classPrivateFieldGet(this, _byteOffset);
-  bufer["set".concat(_classPrivateFieldGet(this, _type))](byteOffset, value, _classPrivateFieldGet(this, _type), _classPrivateFieldGet(this, _littleEndian));
+    get(buffer) {
+        return __classPrivateFieldGet(this, _Int_length, "f") === 1 ? __classPrivateFieldGet(this, _Int_instances, "m", _Int_getInt).call(this, buffer) : __classPrivateFieldGet(this, _Int_instances, "m", _Int_getIntArray).call(this, buffer);
+    }
 }
-function _getInt2(bufer) {
-  var byteOffset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _classPrivateFieldGet(this, _byteOffset);
-  return bufer["get".concat(_classPrivateFieldGet(this, _type))](byteOffset, _classPrivateFieldGet(this, _littleEndian));
+_Int_type = new WeakMap(), _Int_byteOffset = new WeakMap(), _Int_littleEndian = new WeakMap(), _Int_length = new WeakMap(), _Int_byteLength = new WeakMap(), _Int_size = new WeakMap(), _Int_instances = new WeakSet(), _Int_setInt = function _Int_setInt(buffer, value, byteOffset = __classPrivateFieldGet(this, _Int_byteOffset, "f")) {
+    buffer[`set${__classPrivateFieldGet(this, _Int_type, "f")}`](byteOffset, value, __classPrivateFieldGet(this, _Int_littleEndian, "f"));
+}, _Int_getInt = function _Int_getInt(buffer, byteOffset = __classPrivateFieldGet(this, _Int_byteOffset, "f")) {
+    return buffer[`get${__classPrivateFieldGet(this, _Int_type, "f")}`](byteOffset, __classPrivateFieldGet(this, _Int_littleEndian, "f"));
+}, _Int_setIntArray = function _Int_setIntArray(buffer, array) {
+    for (let i = 0; i < __classPrivateFieldGet(this, _Int_length, "f"); i++) {
+        const value = array?.[i] ?? 0;
+        __classPrivateFieldGet(this, _Int_instances, "m", _Int_setInt).call(this, buffer, value, __classPrivateFieldGet(this, _Int_byteOffset, "f") + i * __classPrivateFieldGet(this, _Int_byteLength, "f"));
+    }
+}, _Int_getIntArray = function _Int_getIntArray(buffer) {
+    const arr = [];
+    for (let i = 0; i < __classPrivateFieldGet(this, _Int_length, "f"); i++) {
+        const value = __classPrivateFieldGet(this, _Int_instances, "m", _Int_getInt).call(this, buffer, __classPrivateFieldGet(this, _Int_byteOffset, "f") + i * __classPrivateFieldGet(this, _Int_byteLength, "f"));
+        arr.push(value);
+    }
+    return arr;
+};
+class Char extends Int {
+    constructor(object) {
+        super(object);
+    }
+    set(buffer, value) {
+        if (typeof value === 'string') {
+            const arr = value.split('').map(char => char.charCodeAt(0));
+            super.set(buffer, arr);
+        }
+        else {
+            super.set(buffer, value);
+        }
+    }
+    get(buffer, asString) {
+        const arr = super.get(buffer);
+        return String.fromCharCode(...arr.filter(i => i));
+    }
 }
-function _setIntArray2(bufer, array) {
-  for (var i = 0; i < _classPrivateFieldGet(this, _length); i++) {
-    var value = (array === null || array === void 0 ? void 0 : array[i]) || 0;
-    _classPrivateMethodGet(this, _setInt, _setInt2).call(this, bufer, value, _classPrivateFieldGet(this, _byteOffset) + i * _classPrivateFieldGet(this, _byteLength));
-  }
+class Struct {
+    constructor(array) {
+        _Struct_length.set(this, void 0);
+        _Struct_object.set(this, void 0);
+        _Struct_struct.set(this, void 0);
+        _Struct_byteOffset.set(this, void 0);
+        __classPrivateFieldSet(this, _Struct_length, 0, "f");
+        __classPrivateFieldSet(this, _Struct_object, {}, "f");
+        __classPrivateFieldSet(this, _Struct_byteOffset, 0, "f");
+        this.init(array);
+        __classPrivateFieldSet(this, _Struct_struct, new DataView(new ArrayBuffer(__classPrivateFieldGet(this, _Struct_length, "f"))), "f");
+    }
+    static parseStruct(data) {
+        data = data.replace(/\r?\n/g, '');
+        const getStruct = data.match(/struct(.*?)};/gi) || [];
+        const getEnum = data.match(/enum(.*?)};/gi) || [];
+        const structs = {};
+        let keys = [];
+        getEnum.forEach(enumData => {
+            const all = enumData.match(/\w*,/g) || [];
+            keys = all.map(i => i.replace(',', '').replace('KEY_', ''));
+        });
+        getStruct.forEach(struct => {
+            const structName = struct.match(/[^struct\s](\w*)/)?.[0] || '';
+            structs[structName] = [];
+            const args = struct.match(/{(.*)}/)?.[0].replace(/[{,}]/g, '') || '';
+            const variables = args.match(/[^\s*](\w*) (\w*|\w*\[\d*\]);/g) || [];
+            variables.forEach(variable => {
+                const [type, value] = variable.split(' ');
+                const name = value.match(/(\w*)/)?.[0] || '';
+                const length = value.match(/\[(\d+)\]/)?.[1];
+                const res = { type, name };
+                if (length)
+                    res.length = +length;
+                structs[structName].push(res);
+            });
+        });
+        return { keys, structs };
+    }
+    init(array) {
+        array.forEach(item => {
+            const byteOffset = item.byteOffset ?? __classPrivateFieldGet(this, _Struct_byteOffset, "f");
+            __classPrivateFieldGet(this, _Struct_object, "f")[item.name] = this.getInstanceData(item.type, { ...item, byteOffset });
+            const size = __classPrivateFieldGet(this, _Struct_object, "f")[item.name].size;
+            __classPrivateFieldSet(this, _Struct_byteOffset, __classPrivateFieldGet(this, _Struct_byteOffset, "f") + size, "f");
+            __classPrivateFieldSet(this, _Struct_length, __classPrivateFieldGet(this, _Struct_length, "f") + size, "f");
+        });
+    }
+    getInstanceData(type, data) {
+        const byteOffset = data.byteOffset ?? 0;
+        if (['int8_t'].includes(type))
+            return new Int({ ...data, byteLength: 1, type: 'Int8', byteOffset });
+        if (['int16_t'].includes(type))
+            return new Int({ ...data, byteLength: 2, type: 'Int16', byteOffset });
+        if (['int32_t'].includes(type))
+            return new Int({ ...data, byteLength: 4, type: 'Int32', byteOffset });
+        if (['uint8_t'].includes(type))
+            return new Int({ ...data, byteLength: 1, type: 'Uint8', byteOffset });
+        if (['uint16_t'].includes(type))
+            return new Int({ ...data, byteLength: 2, type: 'Uint16', byteOffset });
+        if (['uint32_t'].includes(type))
+            return new Int({ ...data, byteLength: 4, type: 'Uint32', byteOffset });
+        if (['float'].includes(type))
+            return new Int({ ...data, byteLength: 4, type: 'Float32', byteOffset });
+        if (['char'].includes(type))
+            return new Char({ ...data, byteLength: 1, type: 'Uint8', byteOffset });
+        throw new Error(`Unknown type: ${type}`);
+    }
+    get length() {
+        return __classPrivateFieldGet(this, _Struct_length, "f");
+    }
+    getObject() {
+        const obj = {};
+        for (const key in __classPrivateFieldGet(this, _Struct_object, "f")) {
+            const data = __classPrivateFieldGet(this, _Struct_object, "f")[key];
+            if (data instanceof Char)
+                obj[key] = data.get(__classPrivateFieldGet(this, _Struct_struct, "f"));
+            else if (data)
+                obj[key] = data.get(__classPrivateFieldGet(this, _Struct_struct, "f"));
+        }
+        return obj;
+    }
+    setObject(object) {
+        for (const key in object) {
+            const data = __classPrivateFieldGet(this, _Struct_object, "f")[key];
+            const value = object[key];
+            if (data)
+                data.set(__classPrivateFieldGet(this, _Struct_struct, "f"), value);
+        }
+        return this;
+    }
+    getBuffer() {
+        return __classPrivateFieldGet(this, _Struct_struct, "f").buffer instanceof ArrayBuffer ? __classPrivateFieldGet(this, _Struct_struct, "f").buffer.slice(0) : new ArrayBuffer(0);
+    }
+    setBuffer(buffer) {
+        if (buffer instanceof ArrayBuffer) {
+            if (buffer.byteLength !== __classPrivateFieldGet(this, _Struct_struct, "f").buffer.byteLength)
+                return this;
+            __classPrivateFieldSet(this, _Struct_struct, new DataView(buffer), "f");
+        }
+        return this;
+    }
 }
-function _getIntArray2(bufer) {
-  var arr = [];
-  for (var i = 0; i < _classPrivateFieldGet(this, _length); i++) {
-    var value = _classPrivateMethodGet(this, _getInt, _getInt2).call(this, bufer, _classPrivateFieldGet(this, _byteOffset) + i * _classPrivateFieldGet(this, _byteLength));
-    arr.push(value);
-  }
-  return arr;
-}
-var Char = /*#__PURE__*/function (_Int) {
-  _inherits(Char, _Int);
-  var _super = _createSuper(Char);
-  function Char(object) {
-    _classCallCheck(this, Char);
-    return _super.call(this, object);
-  }
-  _createClass(Char, [{
-    key: "set",
-    value: function set(bufer, value) {
-      var arr = value.split('').map(function (_char) {
-        return _char.charCodeAt(0);
-      });
-      _get(_getPrototypeOf(Char.prototype), "set", this).call(this, bufer, arr);
-    }
-  }, {
-    key: "get",
-    value: function get(bufer) {
-      var arr = _get(_getPrototypeOf(Char.prototype), "get", this).call(this, bufer);
-      return String.fromCharCode.apply(String, _toConsumableArray(arr.filter(function (i) {
-        return i;
-      })));
-    }
-  }]);
-  return Char;
-}(Int);
-var _length2 = /*#__PURE__*/new WeakMap();
-var _object = /*#__PURE__*/new WeakMap();
-var _struct = /*#__PURE__*/new WeakMap();
-var _byteOffset3 = /*#__PURE__*/new WeakMap();
-var Struct = /*#__PURE__*/function () {
-  function Struct(array) {
-    _classCallCheck(this, Struct);
-    _classPrivateFieldInitSpec(this, _length2, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldInitSpec(this, _object, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldInitSpec(this, _struct, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldInitSpec(this, _byteOffset3, {
-      writable: true,
-      value: void 0
-    });
-    _classPrivateFieldSet(this, _length2, 0);
-    _classPrivateFieldSet(this, _object, {});
-    _classPrivateFieldSet(this, _byteOffset3, 0);
-    this.init(array);
-    _classPrivateFieldSet(this, _struct, new DataView(new ArrayBuffer(_classPrivateFieldGet(this, _length2))));
-  }
-  _createClass(Struct, [{
-    key: "init",
-    value: function init(array) {
-      var _this = this;
-      array.forEach(function (item) {
-        _classPrivateFieldGet(_this, _object)[item.name] = _this.getInstanceData(item.type, _objectSpread(_objectSpread({}, item), {}, {
-          byteOffset: _classPrivateFieldGet(_this, _byteOffset3)
-        }));
-        var size = _classPrivateFieldGet(_this, _object)[item.name].size;
-        _classPrivateFieldSet(_this, _byteOffset3, _classPrivateFieldGet(_this, _byteOffset3) + size);
-        _classPrivateFieldSet(_this, _length2, _classPrivateFieldGet(_this, _length2) + size);
-      });
-    }
-  }, {
-    key: "getInstanceData",
-    value: function getInstanceData(type, data) {
-      if (['int8_t'].includes(type)) return new Int(_objectSpread(_objectSpread({}, data), {}, {
-        byteLength: 1,
-        type: 'Int8'
-      }));
-      if (['int16_t'].includes(type)) return new Int(_objectSpread(_objectSpread({}, data), {}, {
-        byteLength: 2,
-        type: 'Int16'
-      }));
-      if (['int32_t'].includes(type)) return new Int(_objectSpread(_objectSpread({}, data), {}, {
-        byteLength: 4,
-        type: 'Int32'
-      }));
-      if (['uint8_t'].includes(type)) return new Int(_objectSpread(_objectSpread({}, data), {}, {
-        byteLength: 1,
-        type: 'Uint8'
-      }));
-      if (['uint8_t'].includes(type)) return new Int(_objectSpread(_objectSpread({}, data), {}, {
-        byteLength: 1,
-        type: 'Uint8'
-      }));
-      if (['uint16_t'].includes(type)) return new Int(_objectSpread(_objectSpread({}, data), {}, {
-        byteLength: 2,
-        type: 'Uint16'
-      }));
-      if (['uint32_t'].includes(type)) return new Int(_objectSpread(_objectSpread({}, data), {}, {
-        byteLength: 4,
-        type: 'Uint32'
-      }));
-      if (['float'].includes(type)) return new Int(_objectSpread(_objectSpread({}, data), {}, {
-        byteLength: 4,
-        type: 'Float32'
-      }));
-      if (['char'].includes(type)) return new Char(_objectSpread(_objectSpread({}, data), {}, {
-        byteLength: 1,
-        type: 'Uint8'
-      }));
-    }
-  }, {
-    key: "length",
-    get: function get() {
-      return _classPrivateFieldGet(this, _length2);
-    }
-  }, {
-    key: "getObject",
-    value: function getObject() {
-      var obj = {};
-      for (var key in _classPrivateFieldGet(this, _object)) {
-        var data = _classPrivateFieldGet(this, _object)[key];
-        if (data) obj[key] = data.get(_classPrivateFieldGet(this, _struct));
-      }
-      return obj;
-    }
-  }, {
-    key: "setObject",
-    value: function setObject(object) {
-      for (var key in object) {
-        var data = _classPrivateFieldGet(this, _object)[key];
-        var value = object[key];
-        if (data) data.set(_classPrivateFieldGet(this, _struct), value);
-      }
-      return this;
-    }
-  }, {
-    key: "getBuffer",
-    value: function getBuffer() {
-      return _classPrivateFieldGet(this, _struct).buffer;
-    }
-  }, {
-    key: "setBuffer",
-    value: function setBuffer(buffer) {
-      if (buffer instanceof ArrayBuffer) {
-        if (buffer.size !== _classPrivateFieldGet(this, _struct).buffer.size) return this;
-        _classPrivateFieldSet(this, _struct, new DataView(buffer));
-      }
-      return this;
-    }
-  }]);
-  return Struct;
-}();
-var _default = Struct;
-exports["default"] = _default;
+_Struct_length = new WeakMap(), _Struct_object = new WeakMap(), _Struct_struct = new WeakMap(), _Struct_byteOffset = new WeakMap();
+exports.default = Struct;
