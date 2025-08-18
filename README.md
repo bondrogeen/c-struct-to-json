@@ -85,6 +85,10 @@ console.log(newMyStruct);
 
 See [example/example.js](example/example.js) for more.
 
+## 1.1.2 (2025-07-07)
+
+- (bondrogeen) typescript
+
 ### 1.0.2 (2023-07-02)
 
 - (bondrogeen) fix array size
