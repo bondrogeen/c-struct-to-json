@@ -67,8 +67,9 @@ class Char extends Int {
   set(buffer: DataView, value: number | number[]): void;
   set(buffer: DataView, value: string | number | number[]): void {
     if (typeof value === 'string') {
-      const arr = value.split('').map(char => char.charCodeAt(0));
-      super.set(buffer, arr);
+      const encoder = new TextEncoder();
+      const bytes = encoder.encode(value);
+      super.set(buffer, Array.from(bytes));
     } else {
       super.set(buffer, value as number | number[]);
     }
@@ -77,7 +78,9 @@ class Char extends Int {
   get(buffer: DataView, asString: true): string;
   get(buffer: DataView, asString?: boolean): number | number[] | string {
     const arr = super.get(buffer) as number[];
-    return String.fromCharCode(...arr.filter(i => i));
+    const bytes = new Uint8Array(arr.filter(i => i));
+    const decoder = new TextDecoder('utf-8');
+    return decoder.decode(bytes);
   }
 }
 
