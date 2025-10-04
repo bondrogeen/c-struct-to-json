@@ -67,8 +67,9 @@ class Char extends Int {
     }
     set(buffer, value) {
         if (typeof value === 'string') {
-            const arr = value.split('').map(char => char.charCodeAt(0));
-            super.set(buffer, arr);
+            const encoder = new TextEncoder();
+            const bytes = encoder.encode(value);
+            super.set(buffer, Array.from(bytes));
         }
         else {
             super.set(buffer, value);
@@ -76,7 +77,9 @@ class Char extends Int {
     }
     get(buffer, asString) {
         const arr = super.get(buffer);
-        return String.fromCharCode(...arr.filter(i => i));
+        const bytes = new Uint8Array(arr.filter(i => i));
+        const decoder = new TextDecoder('utf-8');
+        return decoder.decode(bytes);
     }
 }
 class Struct {
