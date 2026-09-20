@@ -10,7 +10,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _Int_instances, _Int_type, _Int_byteOffset, _Int_littleEndian, _Int_length, _Int_byteLength, _Int_size, _Int_setInt, _Int_getInt, _Int_setIntArray, _Int_getIntArray, _Struct_length, _Struct_object, _Struct_struct, _Struct_byteOffset;
+var _Int_instances, _Int_type, _Int_byteOffset, _Int_littleEndian, _Int_length, _Int_byteLength, _Int_size, _Int_isBigInt_get, _Int_setInt, _Int_getInt, _Int_setIntArray, _Int_getIntArray, _Struct_length, _Struct_object, _Struct_struct, _Struct_byteOffset;
 Object.defineProperty(exports, "__esModule", { value: true });
 class Int {
     constructor({ byteLength, type, byteOffset, littleEndian, length }) {
@@ -44,10 +44,19 @@ class Int {
         return __classPrivateFieldGet(this, _Int_length, "f") === 1 ? __classPrivateFieldGet(this, _Int_instances, "m", _Int_getInt).call(this, buffer) : __classPrivateFieldGet(this, _Int_instances, "m", _Int_getIntArray).call(this, buffer);
     }
 }
-_Int_type = new WeakMap(), _Int_byteOffset = new WeakMap(), _Int_littleEndian = new WeakMap(), _Int_length = new WeakMap(), _Int_byteLength = new WeakMap(), _Int_size = new WeakMap(), _Int_instances = new WeakSet(), _Int_setInt = function _Int_setInt(buffer, value, byteOffset = __classPrivateFieldGet(this, _Int_byteOffset, "f")) {
-    buffer[`set${__classPrivateFieldGet(this, _Int_type, "f")}`](byteOffset, value, __classPrivateFieldGet(this, _Int_littleEndian, "f"));
+_Int_type = new WeakMap(), _Int_byteOffset = new WeakMap(), _Int_littleEndian = new WeakMap(), _Int_length = new WeakMap(), _Int_byteLength = new WeakMap(), _Int_size = new WeakMap(), _Int_instances = new WeakSet(), _Int_isBigInt_get = function _Int_isBigInt_get() {
+    return __classPrivateFieldGet(this, _Int_type, "f") === 'BigInt64' || __classPrivateFieldGet(this, _Int_type, "f") === 'BigUint64';
+}, _Int_setInt = function _Int_setInt(buffer, value, byteOffset = __classPrivateFieldGet(this, _Int_byteOffset, "f")) {
+    if (__classPrivateFieldGet(this, _Int_instances, "a", _Int_isBigInt_get)) {
+        const v = typeof value === 'bigint' ? value : BigInt(Math.trunc(value));
+        buffer[`set${__classPrivateFieldGet(this, _Int_type, "f")}`](byteOffset, v, __classPrivateFieldGet(this, _Int_littleEndian, "f"));
+    }
+    else {
+        buffer[`set${__classPrivateFieldGet(this, _Int_type, "f")}`](byteOffset, value, __classPrivateFieldGet(this, _Int_littleEndian, "f"));
+    }
 }, _Int_getInt = function _Int_getInt(buffer, byteOffset = __classPrivateFieldGet(this, _Int_byteOffset, "f")) {
-    return buffer[`get${__classPrivateFieldGet(this, _Int_type, "f")}`](byteOffset, __classPrivateFieldGet(this, _Int_littleEndian, "f"));
+    const v = buffer[`get${__classPrivateFieldGet(this, _Int_type, "f")}`](byteOffset, __classPrivateFieldGet(this, _Int_littleEndian, "f"));
+    return __classPrivateFieldGet(this, _Int_instances, "a", _Int_isBigInt_get) ? Number(v) : v;
 }, _Int_setIntArray = function _Int_setIntArray(buffer, array) {
     for (let i = 0; i < __classPrivateFieldGet(this, _Int_length, "f"); i++) {
         const value = array?.[i] ?? 0;
@@ -138,12 +147,16 @@ class Struct {
             return new Int({ ...data, byteLength: 2, type: 'Int16', byteOffset });
         if (['int32_t'].includes(type))
             return new Int({ ...data, byteLength: 4, type: 'Int32', byteOffset });
+        if (['int64_t'].includes(type))
+            return new Int({ ...data, byteLength: 8, type: 'BigInt64', byteOffset });
         if (['uint8_t'].includes(type))
             return new Int({ ...data, byteLength: 1, type: 'Uint8', byteOffset });
         if (['uint16_t'].includes(type))
             return new Int({ ...data, byteLength: 2, type: 'Uint16', byteOffset });
         if (['uint32_t'].includes(type))
             return new Int({ ...data, byteLength: 4, type: 'Uint32', byteOffset });
+        if (['uint64_t'].includes(type))
+            return new Int({ ...data, byteLength: 8, type: 'BigUint64', byteOffset });
         if (['float'].includes(type))
             return new Int({ ...data, byteLength: 4, type: 'Float32', byteOffset });
         if (['char'].includes(type))

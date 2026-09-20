@@ -9,7 +9,7 @@ export type ParseStructResult = {
     keys: string[];
     structs: StructsMap;
 };
-export type IntType = 'Int8' | 'Int16' | 'Int32' | 'Uint8' | 'Uint16' | 'Uint32' | 'Float32';
+export type IntType = 'Int8' | 'Int16' | 'Int32' | 'BigInt64' | 'Uint8' | 'Uint16' | 'Uint32' | 'BigUint64' | 'Float32';
 export interface IntOptions {
     byteLength: number;
     type: IntType;

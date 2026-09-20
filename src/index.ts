@@ -25,15 +25,25 @@ class Int {
     return this.#size;
   }
 
-  #setInt(buffer: DataView, value: number, byteOffset: number = this.#byteOffset) {
-    (buffer as any)[`set${this.#type}`](byteOffset, value, this.#littleEndian);
+  get #isBigInt(): boolean {
+    return this.#type === 'BigInt64' || this.#type === 'BigUint64';
+  }
+
+  #setInt(buffer: DataView, value: number | bigint, byteOffset: number = this.#byteOffset): void {
+    if (this.#isBigInt) {
+      const v = typeof value === 'bigint' ? value : BigInt(Math.trunc(value));
+      (buffer as any)[`set${this.#type}`](byteOffset, v, this.#littleEndian);
+    } else {
+      (buffer as any)[`set${this.#type}`](byteOffset, value as number, this.#littleEndian);
+    }
   }
 
   #getInt(buffer: DataView, byteOffset: number = this.#byteOffset): number {
-    return (buffer as any)[`get${this.#type}`](byteOffset, this.#littleEndian);
+    const v = (buffer as any)[`get${this.#type}`](byteOffset, this.#littleEndian);
+    return this.#isBigInt ? Number(v) : v;
   }
 
-  #setIntArray(buffer: DataView, array: number[]) {
+  #setIntArray(buffer: DataView, array: number[] | bigint[]): void {
     for (let i = 0; i < this.#length; i++) {
       const value = array?.[i] ?? 0;
       this.#setInt(buffer, value, this.#byteOffset + i * this.#byteLength);
@@ -49,9 +59,9 @@ class Int {
     return arr;
   }
 
-  set(buffer: DataView, data: number | number[]) {
-    if (this.#length === 1) this.#setInt(buffer, data as number);
-    else this.#setIntArray(buffer, data as number[]);
+  set(buffer: DataView, data: number | bigint | number[] | bigint[]): void {
+    if (this.#length === 1) this.#setInt(buffer, data as number | bigint);
+    else this.#setIntArray(buffer, data as number[] | bigint[]);
   }
 
   get(buffer: DataView): number | number[] {
@@ -85,7 +95,7 @@ class Char extends Int {
 }
 
 type StructObject = Record<string, Int | Char>;
-type StructInput = Record<string, number | number[] | string>;
+type StructInput = Record<string, number | bigint | number[] | bigint[] | string>;
 
 class Struct {
   #length: number;
@@ -147,9 +157,11 @@ class Struct {
     if (['int8_t'].includes(type)) return new Int({ ...data, byteLength: 1, type: 'Int8', byteOffset });
     if (['int16_t'].includes(type)) return new Int({ ...data, byteLength: 2, type: 'Int16', byteOffset });
     if (['int32_t'].includes(type)) return new Int({ ...data, byteLength: 4, type: 'Int32', byteOffset });
+    if (['int64_t'].includes(type)) return new Int({ ...data, byteLength: 8, type: 'BigInt64', byteOffset });
     if (['uint8_t'].includes(type)) return new Int({ ...data, byteLength: 1, type: 'Uint8', byteOffset });
     if (['uint16_t'].includes(type)) return new Int({ ...data, byteLength: 2, type: 'Uint16', byteOffset });
     if (['uint32_t'].includes(type)) return new Int({ ...data, byteLength: 4, type: 'Uint32', byteOffset });
+    if (['uint64_t'].includes(type)) return new Int({ ...data, byteLength: 8, type: 'BigUint64', byteOffset });
     if (['float'].includes(type)) return new Int({ ...data, byteLength: 4, type: 'Float32', byteOffset });
     if (['char'].includes(type)) return new Char({ ...data, byteLength: 1, type: 'Uint8', byteOffset });
     throw new Error(`Unknown type: ${type}`);

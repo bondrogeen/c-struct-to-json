@@ -1,5 +1,5 @@
 import type { StructField, ParseStructResult } from './types';
-type StructInput = Record<string, number | number[] | string>;
+type StructInput = Record<string, number | bigint | number[] | bigint[] | string>;
 declare class Struct {
     #private;
     constructor(array: StructField[]);
